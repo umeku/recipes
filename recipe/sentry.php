@@ -138,7 +138,11 @@ EXAMPLE
 
 function releaseIsGitDirectory()
 {
-    return (bool) run('cd {{release_path}} && git rev-parse --git-dir > /dev/null 2>&1 && echo 1');
+    try {
+        return (bool)run('cd {{release_path}} && git rev-parse --git-dir > /dev/null 2>&1 && echo 1');
+    } catch (\Deployer\Exception\RuntimeException $e) {
+        return false;
+    }
 }
 
 function getReleaseGitRef(): Closure
